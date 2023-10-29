@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% include head.html %}
+
+<body id="app">
+
+  {% include header.html %}
+
+  <main id="main">
+
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>{{ page.title }}</h2>
+          <ol>
+            <li><a href="/" class="ylink">Home</a></li>
+            <li>{{ page.title }}</li>
+          </ol>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="inner-page" style="min-height: 80vh;">
+      <div class="container">
+        {{ content }}
+      </div>
+    </section>
+
+  </main>
+
+  {% include bottom.html %}
+
+</body>
+</html>

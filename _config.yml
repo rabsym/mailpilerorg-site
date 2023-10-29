@@ -1,0 +1,30 @@
+id: piler
+owner: Janos SUTO
+email: sj@acts.hu
+metakeywords: open source email archiving solution,archive email,enterprise email archive,email archiving software,email retention laws,email retention policies,email archiving,enterprise information archiving,enterprise email management
+metadescription: piler email archiver
+exclude: [README, TODO, misc]
+plugins:
+  - jekyll-paginate-v2
+
+pagination:
+  enabled: true
+  per_page: 10
+  permalink: '/blog/:num/'
+  title: ':title'
+  limit: 0
+  sort_field: 'date'
+  sort_reverse: true
+  indexpage: blog
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      permalink: /:title/
+  - scope:
+      path: ""
+    values:
+      layout: "default"

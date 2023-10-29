@@ -1,0 +1,16 @@
+- name: Home
+  link: /
+- name: Documentation
+  link: /docs.html
+- name: Services
+  link: /services.html
+- name: Download
+  link: /download.html
+- name: Support
+  link: /support.html
+- name: Demo
+  link: /#demo
+- name: FAQ
+  link: /faq.html
+- name: Blog
+  link: /blog.html
