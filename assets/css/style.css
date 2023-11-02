@@ -24,8 +24,11 @@ a:hover {
 
 h1, h2, h3, h4, h5, h6 { font-family: "Raleway", sans-serif; }
 
+h3 { padding-top: 20px;}
+
 //.inner-page { background: #292929; color: white; }
-.inner-page { color: white; background: url("../img/bg/pexels-adrien-olichon-2387793.jpg") top center; background-size: cover; }
+//.inner-page { color: #f1f0ea; background: url("../img/bg/pexels-adrien-olichon-2387793.jpg") top center; background-size: cover; }
+.inner-page { color: #dee2e6; background: #292929; background-size: cover; }
 
 .highlight pre {color: #9bddff;}
 .card-multitenant {width: 30rem;}

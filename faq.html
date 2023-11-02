@@ -5,11 +5,11 @@ title: FAQ
 
 
 
-<p><strong>What timezone should I use?</strong></p>
+<h3>What timezone should I use?</h3>
 
 <p>I suggest to use UTC.</p>
 
-<p><strong>Archive size mismatch</strong></p>
+<h3>Archive size mismatch</h3>
 
 
 <p>Piler stores emails and attachments as distinct files in the filesystem. The filesystem type (eg. ext4, xfs, …) and its settings affects the used disk space. There's a difference between the apparent size and the size occupied on disk. The latter might be significantly larger especially with bigger block sizes when you have mostly small messages.</p>
@@ -18,7 +18,7 @@ title: FAQ
 
 <p>See more at https://bitbucket.org/jsuto/piler/issues/961/archive-size-mismatch</p>
 
-<p><strong>What performance can piler achieve?</strong></p>
+<h3>What performance can piler achieve?</h3>
 
 <p>The available performance depends on the HW capacities you have, eg. number of CPU cores, memory, disk IO, network speed, as well as application settings (especially mysql innodb parameters, see below) etc.</p>
 
@@ -40,7 +40,7 @@ smtp-source -c -s 20 -m 10000 -l 100000 127.0.0.1:25
 
 <p>TODO: Add some explanation, etc.</p>
 
-<p><strong>How to change the retention for all emails?</strong></p>
+<h3>How to change the retention for all emails?</h3>
 
 <p>Connect to the piler mysql database, then run the following SQL statement to set the retained column to 180 days:</p>
 
@@ -48,7 +48,7 @@ smtp-source -c -s 20 -m 10000 -l 100000 127.0.0.1:25
 update metadata set retained = sent + 86400*180;
 </code>
 
-<p><strong>pilerimport: IMAP username cannot contain spaces</strong></p>
+<h3>pilerimport: IMAP username cannot contain spaces</h3>
 
 </p>Use double quotes inside of single quotes, eg.</p>
 
@@ -59,7 +59,7 @@ pilerimport -u '“User Name”' ...
 <p>See https://bitbucket.org/jsuto/piler/issues/952/pilerimport-imap-username-cannot-contain for more.</p>
 
 
-<p><strong>What are the recommended mysql settings?</strong></p>
+<h3>What are the recommended mysql settings?</h3>
 
 <p>Several key information, data are stored in mysql, so you have to make sure mysql has all the resources it needs to perform properly. Quite often the default settings are not enough beyond a certain archive size, because you need bigger buffers, etc.</p>
 
@@ -79,7 +79,7 @@ innodb_file_per_table
 </pre>
 </code>
 
-<p><strong>How to backup and restore the archive?</strong></p>
+<h3>How to backup and restore the archive?</h3>
 
 <p>You have two options:</p>
 
@@ -110,7 +110,7 @@ rm *
 
 <p>The restore procedure is to deploy piler, then restore the previously saved files and directories mentioned above.</p>
 
-<p><strong>mysql_stmt_execute error: *Incorrect string value: '\xF0\x9D\x91\x83\xF0\x9D…' for column 'body' at row 1* (errno: 1366)</strong></p>
+<h3>mysql_stmt_execute error: *Incorrect string value: '\xF0\x9D\x91\x83\xF0\x9D…' for column 'body' at row 1* (errno: 1366)</h3>
 
 <p>Mysql supports utf-8 character set. However, mysql does NOT support the complete utf-8 code table, only a subset of it. If the email has a character or symbol in the unsupported region (think of the 4 byte values), then it can't store such a value if you are using mysql 5.7 or newer (or mariadb 10.2 or newer).</p>
 
@@ -133,11 +133,11 @@ ALTER TABLE table_name CHANGE column_name column_name VARCHAR(191) CHARACTER SET
 
 <p>Also, you may check out <a href="https://bitbucket.org/jsuto/piler/issues/1088/provide-instructions-on-how-to-migrate" target="_blank">https://bitbucket.org/jsuto/piler/issues/1088/provide-instructions-on-how-to-migrate</a> for a user contributed procedure.</p>
 
-<p><strong>I can see mysql_stmt_execute error: *Out of range value for column 'retained' at row 1 errors in the mail log</strong></p>
+<h3>I can see mysql_stmt_execute error: *Out of range value for column 'retained' at row 1 errors in the mail log</h3>
 
 <p>See <a href="https://bitbucket.org/jsuto/piler/issues/813/" target="_blank">#813</a> fix on Bitbucket.</p>
 
-<p><strong>My older emails are gone!</strong></p>
+<h3>My older emails are gone!</h3>
 
 <p>Follow these instructions to figure out if you really lost your emails. Chances are that you haven't!</p>
 
@@ -146,19 +146,19 @@ ALTER TABLE table_name CHANGE column_name column_name VARCHAR(191) CHARACTER SET
     double check with the pilerget utility, ie. if eg. pilerget 4000000057950fd127ea028c005a30f2f951 returns the email (don't forget to use your *actual* piler_id!), then the email is in the archive
     check the sphinx database (not a mysql database, sphinx has its own database which can be accessed with mysql -h 127.0.0.1 -P 9306) if the older IDs (the same as in metadata.id) are present: select * from main1,dailydelta1,delta1 where id=123 (also use the actual id!)
 
-<p><strong>Why am I getting a “cannot write current directory!” message?</strong></p>
+<h3>Why am I getting a “cannot write current directory!” message?</h3>
 
 <p>Most of the piler binaries are setuid/setgid to piler:piler in order to read/write the store directory. It means that these commands run as user/group piler. The above error message is pretty self explaining: the piler user can't write the current directory. Solution: cd /tmp or cd /var/tmp or cd /var/piler/imap, ie. cd to a directory where piler has rwx permissions.</p>
 
-<p><strong>What's the 'master branch'?</strong></p>
+<h3>What's the 'master branch'?</h3>
 
 The master branch is the developer version of piler, kinda the nightly build. This contains all the latest (and probably unstable) code. It doesn't mean that the master branch is a buggy crap, however it does mean that the code is not in its final shape. Just with any other software, unless you are told otherwise, please use a stable version.</p>
 
-<p><strong>What archive and retention rule do I need to archive every email, and keep them for 5 years?</strong></p>
+<h3>What archive and retention rule do I need to archive every email, and keep them for 5 years?</h3>
 
 By default piler archives everything it receives, so you don't need any rules for that. In fact, the archiving rules define what NOT to archive. Also the default_retention_days value in piler.conf applies to all emails, unless it's overridden in the retention rules. So in this just set default_retention_days=1827, restart piler, and you are fine.</p>
 
-<p><strong>I can see lots of duplicates in the archive</strong></p>
+<h3>I can see lots of duplicates in the archive</h3>
 
 The duplicate detection is based on the Message-ID header field. If the piler daemon detects an already known message-id, then it discards the email. As you can see, the Message-ID header is crucial. The piler daemon may archive a single message with a missing message-id field, and discards the subsequent messages having no message-id.</p>
 
@@ -168,7 +168,7 @@ The only negative side effect is the extra resources required, eg. disk space, m
 
 Some internal email sending applications don't know how to create a valid email header, and neglect the message-id. They should be fixed ASAP!</p>
 
-<p><strong>I don't have a /var partition, how to make the disk space projection work?</strong></p>
+<h3>I don't have a /var partition, how to make the disk space projection work?</h3>
 
 Set the following in config-site.php:</p>
 
@@ -178,17 +178,17 @@ $config['DATA_PARTITION'] = '/';
 </pre>
 </code>
 
-<p><strong>I've just sent a few test emails, however no search results in the gui</strong></p>
+<h3>I've just sent a few test emails, however no search results in the gui</h3>
 
 The piler daemon processes email as soon as they are received. However emails are indexed in every 30 mins. So an email is visible in the GUI 30 mins. You may adjust the indexing frequency by editing the cron jobs of piler.</p>
 
-<p><strong>I can't see any results, however the sphinx query in the maillog reports 0 hits, and &gt;0 total found:</strong></p>
+<h3>I can't see any results, however the sphinx query in the maillog reports 0 hits, and &gt;0 total found:</h3>
 
 Aug 11 20:21:36 mailpiler piler-webui[10670]: sphinx query: 'SELECT id FROM main1,dailydelta1,delta1 WHERE MATCH('@(subject,body)  whatever I need') ORDER BY `sent` DESC LIMIT 0,1000 OPTION max_matches=1000' in 0.29 s, 0 hits, 25508 total found
 
 You use an outdated and not supported version of sphinx, typically 2.0.x on Debian or Ubuntu. Make sure you have a recent 2.2.x version. You may download it from http://sphinxsearch.com/downloads/release/.</p>
 
-<p><strong>I want to see more hits!</strong></p>
+<h3>I want to see more hits!</h3>
 
 Edit config-site.php, and set MAX_SEARCH_HITS, eg.:</p>
 
@@ -200,7 +200,7 @@ $config['MAX_SEARCH_HITS'] = 2000;
 
 Note that you should keep this number to a sane value, the bigger it is the more resources you need for both searchd and php.</p>
 
-<p><strong>I forgot the admin@local password</strong></p>
+<h3>I forgot the admin@local password</h3>
 
 Connect to the piler database, and set the crypted password manually, eg:</p>
 
@@ -210,9 +210,9 @@ mysql&gt; update user set password='$5$TXL7EX$s17XtxwbCs1MDAzuulF/STauTkH0h/KJGH
 </pre>
 </code>
 
-The above crypted password sets the admin@local password to <strong>pilerrocks</strong></p>
+The above crypted password sets the admin@local password to <strong>pilerrocks</h3>
 
-<p><strong>How can I delete everything from the archive?</strong></p>
+<h3>How can I delete everything from the archive?</h3>
 
 Follow the procedure below to do so, and it will reset the archive as if it were freshly installed.</p>
 
@@ -263,7 +263,7 @@ indexer --all
 </pre>
 </code>
 
-<p><strong>Qmail (using as a smarthost) rejects emails from piler saying: 451 See http://pobox.com/~djb/docs/smtplf.html</strong></p>
+<h3>Qmail (using as a smarthost) rejects emails from piler saying: 451 See http://pobox.com/~djb/docs/smtplf.html</h3>
 
 Set the following in config-site.php:</p>
 
@@ -273,7 +273,7 @@ $config['EOL'] = "\r\n";
 </pre>
 </code>
 
-<p><strong>I can see only today's emails in the archive and not any single previous emails.</strong></p>
+<h3>I can see only today's emails in the archive and not any single previous emails.</h3>
 
 Some Linux distributions (notably Debian and Ubuntu) have a daily cron job to reindex everything. Unfortunately this ruins the sphinx index files piler relies on. However the older emails are not lost you still have them, they are just disappeared from the sphinx index. To bring them back, perform the following steps.</p>
 
@@ -290,7 +290,7 @@ reindex -a
 </pre>
 </code>
 
-<p><strong>How to add support for CJK (Chinese, Japanese, and Korean) languages?</strong></p>
+<h3>How to add support for CJK (Chinese, Japanese, and Korean) languages?</h3>
 
 Fix the sphinx indexer settings, ie. add the following two lines to all “index” sections in sphinx.conf:</p>
 
@@ -311,21 +311,21 @@ reindex -a
 </pre>
 </code>
 
-<p><strong>I get a lot of “Format a4 is redefined”, and other messages when importing.</strong></p>
+<h3>I get a lot of “Format a4 is redefined”, and other messages when importing.</h3>
 
 <p>These warning or errors come from the external helper utilities, eg. pdftotext.</p>
 
 <p>They are usually harmless, since piler is interested in only the textual part. However in case of a worst case scenario the given attachment is simply not indexed, and thus is not searchable, but the email is archived, and can be retrieved without any problem.</p>
 
-<p><strong>Outlook 2007 can't open a downloaded EML file.</strong></p>
+<h3>Outlook 2007 can't open a downloaded EML file.</h3>
 
 <p>Check out <a href="http://www.msoutlook.info/question/354" target="blank">http://www.msoutlook.info/question/354</a> for a registry hack.</p>
 
-<p><strong>You get the following error: “Error: SQLSTATE[HY000] [2003] Can't connect to MySQL server on '127.0.0.1' (111) on database: sphinx”</strong></p>
+<h3>You get the following error: “Error: SQLSTATE[HY000] [2003] Can't connect to MySQL server on '127.0.0.1' (111) on database: sphinx”</h3>
 
 <p>Start searchd</p>
 
-<p><strong>I have Centos / Redhat, and when I click on the “Apply” button in the gui, it says: “add the following to /etc/sudoers: 'www-data all=NOPASSWD: /etc/init.d/rc.piler reload'“</strong></p>
+<h3>I have Centos / Redhat, and when I click on the “Apply” button in the gui, it says: “add the following to /etc/sudoers: 'www-data all=NOPASSWD: /etc/init.d/rc.piler reload'“</h3>
 
 <p>Add the following to /etc/sudoers:</p>
 
@@ -336,7 +336,7 @@ Defaults:%apache !requiretty
 </pre>
 </code>
 
-<p><strong>I get the following warning in mysql logs:</strong></p>
+<h3>I get the following warning in mysql logs:</h3>
 
 <code>
 <pre>
@@ -352,19 +352,19 @@ binlog_format = MIXED
 </pre>
 </code>
 
-<p><strong>mysql -u piler -p piler &lt; ./util/db-mysql.sql gives me the following error: ERROR 1071 (42000) at line 109: Specified key was too long; max key length is 1000 bytes”</strong></p>
+<h3>mysql -u piler -p piler &lt; ./util/db-mysql.sql gives me the following error: ERROR 1071 (42000) at line 109: Specified key was too long; max key length is 1000 bytes”</h3>
 
 <p>Make sure you have enabled the InnoDB storage engine, and try to create innodb tables (not myisam!).</p>
 
-<p><strong>I have lots of email addresses (100+) in the search query, and the query in the mail log is truncated, not ending with LIMIT xx,yy</strong></p>
+<h3>I have lots of email addresses (100+) in the search query, and the query in the mail log is truncated, not ending with LIMIT xx,yy</h3>
 
 <p>Increase the thread_stack variable, and restart the searchd daemon. Be sure to read http://sphinxsearch.com/docs/latest/conf-thread-stack.html!</p>
 
-<p><strong>After importing EML files extracted from a PST file, some emails have “From: 'Some Name' <MAILER-DEAMON>” (or the To: field is “redacted”) in the email header.</strong></p>
+<h3>After importing EML files extracted from a PST file, some emails have “From: 'Some Name' <MAILER-DEAMON>” (or the To: field is “redacted”) in the email header.</h3>
 
 <p>It's not a piler bug, the problematic emails have bogus From and/or To headers. The solution is to fix them BEFORE importing. If you realise it only after importing, then purge the archive (if you can afford this) (see the FAQ item above on how), fix the emails, and import them again.</p>
 
-<p><strong>How much memory sphinx requires</strong></p>
+<h3>How much memory sphinx requires</h3>
 
 <p>Connect to sphinx, then run the following statements:</p>
 
@@ -376,4 +376,4 @@ show index delta1 status like 'ram_bytes';
 </pre>
 </code>
 
-<p>See the explantion at http://sphinxsearch.com/blog/2011/11/11/sphinx-memory-consumption/.</p>
+<p>See the explantion at <a href="http://sphinxsearch.com/blog/2011/11/11/sphinx-memory-consumption/" target="_blank">http://sphinxsearch.com/blog/2011/11/11/sphinx-memory-consumption/</a>.</p>
