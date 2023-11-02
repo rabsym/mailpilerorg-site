@@ -6,11 +6,13 @@
   link: /services.html
 - name: Download
   link: /download.html
+- name: Issues
+  link: /issue-tracker.html
 - name: Support
-  link: /support.html
+  link: https://mailpiler.com/support.html
 - name: Demo
-  link: /#demo
+  link: https://mailpiler.com/#demo
 - name: FAQ
   link: /faq.html
 - name: Blog
-  link: /blog.html
+  link: https://mailpiler.com/blog.html
