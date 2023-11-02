@@ -1,0 +1,1 @@
+See the detailed instructions at [https://manuals.gfi.com/en/kerio/connect/content/server-configuration/archiving-and-backup/archiving-in-kerio-connect-1164.html](https://manuals.gfi.com/en/kerio/connect/content/server-configuration/archiving-and-backup/archiving-in-kerio-connect-1164.html) at section “Archiving the whole server”.
