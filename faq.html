@@ -94,46 +94,52 @@ rm *
 </pre>
 </code>
 
-The restore procedure in this case is to deploy piler from scratch, then import all the saved emails.
+<p>The restore procedure in this case is to deploy piler from scratch, then import all the saved emails.</p>
 
-#2: backup the piler, sphinx data, and the configs
+<p>#2: backup the piler, sphinx data, and the configs</p>
 
-Backup regularly the following:
+<p>Backup regularly the following:</p>
 
-    /usr/local/etc/piler directory (piler and sphinx config files, including piler.key file)
-    /var/piler/store/00 directory contents (note that only the last directory in '00' changes)
-    /var/piler/sphinx/main[1-4]* files
-    piler mysql database
-    nginx/apache configs
+<ul>
+  <li>/usr/local/etc/piler directory (piler and sphinx config files, including piler.key file)</li>
+  <li>/var/piler/store/00 directory contents (note that only the last directory in '00' changes)</li>
+  <li>/var/piler/sphinx/main[1-4]* files</li>
+  <li>piler mysql database</li>
+  <li>nginx/apache configs</li>
+</ul>
 
-The restore procedure is to deploy piler, then restore the previously saved files and directories mentioned above.
+<p>The restore procedure is to deploy piler, then restore the previously saved files and directories mentioned above.</p>
 
 <p><strong>mysql_stmt_execute error: *Incorrect string value: '\xF0\x9D\x91\x83\xF0\x9D…' for column 'body' at row 1* (errno: 1366)</strong></p>
 
-Mysql supports utf-8 character set. However, mysql does NOT support the complete utf-8 code table, only a subset of it. If the email has a character or symbol in the unsupported region (think of the 4 byte values), then it can't store such a value if you are using mysql 5.7 or newer (or mariadb 10.2 or newer).
+<p>Mysql supports utf-8 character set. However, mysql does NOT support the complete utf-8 code table, only a subset of it. If the email has a character or symbol in the unsupported region (think of the 4 byte values), then it can't store such a value if you are using mysql 5.7 or newer (or mariadb 10.2 or newer).</p>
 
-The solution is either to use an older mysql version (eg. 5.5 or mariadb 10.1) which is more forgiving with 'invalid' (=read valid, but not supported by mysql version's of utf-8) utf-8 character sequences. Or switch to utf8mb4 encoding which supports the whole range of the utf-8 characters.
+<p>The solution is either to use an older mysql version (eg. 5.5 or mariadb 10.1) which is more forgiving with 'invalid' (=read valid, but not supported by mysql version's of utf-8) utf-8 character sequences. Or switch to utf8mb4 encoding which supports the whole range of the utf-8 characters.</p>
 
-See https://mathiasbynens.be/notes/mysql-utf8mb4 for a detailed guide on the problem, and the solution. The generic steps are (before executing any of these, be sure to read the mentioned article!):
+<p>See <a href="https://mathiasbynens.be/notes/mysql-utf8mb4" target="_blank">https://mathiasbynens.be/notes/mysql-utf8mb4</a> for a detailed guide on the problem, and the solution. The generic steps are (before executing any of these, be sure to read the mentioned article!):</p>
 
+<code>
+<pre>
 # For each database:
 ALTER DATABASE database_name CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 # For each table:
 ALTER TABLE table_name CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 # For each column:
 ALTER TABLE table_name CHANGE column_name column_name VARCHAR(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+</pre>
+</code>
 
-Note that piler 1.3.x uses utf8mb4 by default, so this issue is fixed.
+<p>Note that piler 1.3.x uses utf8mb4 by default, so this issue is fixed.</p>
 
-Also, you may check out https://bitbucket.org/jsuto/piler/issues/1088/provide-instructions-on-how-to-migrate for a user contributed procedure.
+<p>Also, you may check out <a href="https://bitbucket.org/jsuto/piler/issues/1088/provide-instructions-on-how-to-migrate" target="_blank">https://bitbucket.org/jsuto/piler/issues/1088/provide-instructions-on-how-to-migrate</a> for a user contributed procedure.</p>
 
 <p><strong>I can see mysql_stmt_execute error: *Out of range value for column 'retained' at row 1 errors in the mail log</strong></p>
 
-See #813 fix on Bitbucket.
+<p>See <a href="https://bitbucket.org/jsuto/piler/issues/813/" target="_blank">#813</a> fix on Bitbucket.</p>
 
 <p><strong>My older emails are gone!</strong></p>
 
-Follow these instructions to figure out if you really lost your emails. Chances are that you haven't!
+<p>Follow these instructions to figure out if you really lost your emails. Chances are that you haven't!</p>
 
     check the metadata table, and verify that your emails are there
     find some of your “lost” emails under the /var/piler/store/00 directory. The files are named based on the their metadata.piler_id value. If you can find them, then your emails are in the archive.
@@ -142,116 +148,160 @@ Follow these instructions to figure out if you really lost your emails. Chances 
 
 <p><strong>Why am I getting a “cannot write current directory!” message?</strong></p>
 
-Most of the piler binaries are setuid/setgid to piler:piler in order to read/write the store directory. It means that these commands run as user/group piler. The above error message is pretty self explaining: the piler user can't write the current directory. Solution: cd /tmp or cd /var/tmp or cd /var/piler/imap, ie. cd to a directory where piler has rwx permissions.
+<p>Most of the piler binaries are setuid/setgid to piler:piler in order to read/write the store directory. It means that these commands run as user/group piler. The above error message is pretty self explaining: the piler user can't write the current directory. Solution: cd /tmp or cd /var/tmp or cd /var/piler/imap, ie. cd to a directory where piler has rwx permissions.</p>
 
 <p><strong>What's the 'master branch'?</strong></p>
 
-The master branch is the developer version of piler, kinda the nightly build. This contains all the latest (and probably unstable) code. It doesn't mean that the master branch is a buggy crap, however it does mean that the code is not in its final shape. Just with any other software, unless you are told otherwise, please use a stable version.
+The master branch is the developer version of piler, kinda the nightly build. This contains all the latest (and probably unstable) code. It doesn't mean that the master branch is a buggy crap, however it does mean that the code is not in its final shape. Just with any other software, unless you are told otherwise, please use a stable version.</p>
 
 <p><strong>What archive and retention rule do I need to archive every email, and keep them for 5 years?</strong></p>
 
-By default piler archives everything it receives, so you don't need any rules for that. In fact, the archiving rules define what NOT to archive. Also the default_retention_days value in piler.conf applies to all emails, unless it's overridden in the retention rules. So in this just set default_retention_days=1827, restart piler, and you are fine.
+By default piler archives everything it receives, so you don't need any rules for that. In fact, the archiving rules define what NOT to archive. Also the default_retention_days value in piler.conf applies to all emails, unless it's overridden in the retention rules. So in this just set default_retention_days=1827, restart piler, and you are fine.</p>
 
 <p><strong>I can see lots of duplicates in the archive</strong></p>
 
-The duplicate detection is based on the Message-ID header field. If the piler daemon detects an already known message-id, then it discards the email. As you can see, the Message-ID header is crucial. The piler daemon may archive a single message with a missing message-id field, and discards the subsequent messages having no message-id.
+The duplicate detection is based on the Message-ID header field. If the piler daemon detects an already known message-id, then it discards the email. As you can see, the Message-ID header is crucial. The piler daemon may archive a single message with a missing message-id field, and discards the subsequent messages having no message-id.</p>
 
-The pilerimport utility, however, accepts messages even without message-id, because it assumes you really want to archive those messages. So be sure to remove any duplicates before importing them with pilerimport, otherwise you'll have duplicates in the archive.
+The pilerimport utility, however, accepts messages even without message-id, because it assumes you really want to archive those messages. So be sure to remove any duplicates before importing them with pilerimport, otherwise you'll have duplicates in the archive.</p>
 
-The only negative side effect is the extra resources required, eg. disk space, memory, etc.
+The only negative side effect is the extra resources required, eg. disk space, memory, etc.</p>
 
-Some internal email sending applications don't know how to create a valid email header, and neglect the message-id. They should be fixed ASAP!
+Some internal email sending applications don't know how to create a valid email header, and neglect the message-id. They should be fixed ASAP!</p>
 
 <p><strong>I don't have a /var partition, how to make the disk space projection work?</strong></p>
 
-Set the following in config-site.php:
+Set the following in config-site.php:</p>
 
+<code>
+</pre>
 $config['DATA_PARTITION'] = '/';
+</pre>
+</code>
 
 <p><strong>I've just sent a few test emails, however no search results in the gui</strong></p>
 
-The piler daemon processes email as soon as they are received. However emails are indexed in every 30 mins. So an email is visible in the GUI 30 mins. You may adjust the indexing frequency by editing the cron jobs of piler.
+The piler daemon processes email as soon as they are received. However emails are indexed in every 30 mins. So an email is visible in the GUI 30 mins. You may adjust the indexing frequency by editing the cron jobs of piler.</p>
 
 <p><strong>I can't see any results, however the sphinx query in the maillog reports 0 hits, and &gt;0 total found:</strong></p>
 
 Aug 11 20:21:36 mailpiler piler-webui[10670]: sphinx query: 'SELECT id FROM main1,dailydelta1,delta1 WHERE MATCH('@(subject,body)  whatever I need') ORDER BY `sent` DESC LIMIT 0,1000 OPTION max_matches=1000' in 0.29 s, 0 hits, 25508 total found
 
-You use an outdated and not supported version of sphinx, typically 2.0.x on Debian or Ubuntu. Make sure you have a recent 2.2.x version. You may download it from http://sphinxsearch.com/downloads/release/.
+You use an outdated and not supported version of sphinx, typically 2.0.x on Debian or Ubuntu. Make sure you have a recent 2.2.x version. You may download it from http://sphinxsearch.com/downloads/release/.</p>
 
 <p><strong>I want to see more hits!</strong></p>
 
-Edit config-site.php, and set MAX_SEARCH_HITS, eg.:
+Edit config-site.php, and set MAX_SEARCH_HITS, eg.:</p>
 
+<code>
+<pre>
 $config['MAX_SEARCH_HITS'] = 2000;
+</pre>
+</code>
 
-Note that you should keep this number to a sane value, the bigger it is the more resources you need for both searchd and php.
+Note that you should keep this number to a sane value, the bigger it is the more resources you need for both searchd and php.</p>
 
 <p><strong>I forgot the admin@local password</strong></p>
 
-Connect to the piler database, and set the crypted password manually, eg:
+Connect to the piler database, and set the crypted password manually, eg:</p>
 
+<code>
+<pre>
 mysql&gt; update user set password='$5$TXL7EX$s17XtxwbCs1MDAzuulF/STauTkH0h/KJGHudlNQt3R4' where uid=0;
+</pre>
+</code>
 
-The above crypted password sets the admin@local password to pilerrocks
+The above crypted password sets the admin@local password to <strong>pilerrocks</strong></p>
 
 <p><strong>How can I delete everything from the archive?</strong></p>
 
-Follow the procedure below to do so, and it will reset the archive as if it were freshly installed.
+Follow the procedure below to do so, and it will reset the archive as if it were freshly installed.</p>
 
-#1: Stop searchd and piler:
+#1: Stop searchd and piler:</p>
 
+<code>
+<pre>
 /etc/init.d/rc.searchd stop
 /etc/init.d/rc.piler stop
+</pre>
+</code>
 
-#2: Remove stored emails:
+#2: Remove stored emails:</p>
 
+<code>
+<pre>
 rm -rf /var/piler/store/00/*
+</pre>
+</code>
 
-#3: Drop and recreate the piler database:
+#3: Drop and recreate the piler database:</p>
 
+<code>
+<pre>
 mysql&gt; drop database piler;
 mysql&gt; create database piler character set utf8;
 
 mysql -u piler -p piler &lt; /path/to/piler-source-directory/util/db-mysql.sql
+</pre>
+</code>
 
-#4: Reset the sphinx index data
+#4: Reset the sphinx index data</p>
 
+<code>
+<pre>
 rm -rf /var/piler/sphinx/*
 su - piler
 indexer --all
+</pre>
+</code>
 
-#5: Start searchd and piler:
+#5: Start searchd and piler:</p>
 
+<code>
+<pre>
 /etc/init.d/rc.searchd start
 /etc/init.d/rc.piler start 
+</pre>
+</code>
 
 <p><strong>Qmail (using as a smarthost) rejects emails from piler saying: 451 See http://pobox.com/~djb/docs/smtplf.html</strong></p>
 
-Set the following in config-site.php:
+Set the following in config-site.php:</p>
 
+<code>
+<pre>
 $config['EOL'] = "\r\n";
+</pre>
+</code>
 
 <p><strong>I can see only today's emails in the archive and not any single previous emails.</strong></p>
 
-Some Linux distributions (notably Debian and Ubuntu) have a daily cron job to reindex everything. Unfortunately this ruins the sphinx index files piler relies on. However the older emails are not lost you still have them, they are just disappeared from the sphinx index. To bring them back, perform the following steps.
+Some Linux distributions (notably Debian and Ubuntu) have a daily cron job to reindex everything. Unfortunately this ruins the sphinx index files piler relies on. However the older emails are not lost you still have them, they are just disappeared from the sphinx index. To bring them back, perform the following steps.</p>
 
-1. Edit /etc/default/sphinxsearch, and set START=“no”.
+1. Edit /etc/default/sphinxsearch, and set START=“no”.</p>
 
-I recommend you to use the piler shipped init.d/rc.searchd script to start searchd. You may call it from /etc/rc.local. (Note that it starts it as user piler, so make sure /var/piler/sphinx has proper ownership.)
+I recommend you to use the piler shipped init.d/rc.searchd script to start searchd. You may call it from /etc/rc.local. (Note that it starts it as user piler, so make sure /var/piler/sphinx has proper ownership.)</p>
 
-2. Reindex old emails. After that older emails should appear after the next indexing is done.
+2. Reindex old emails. After that older emails should appear after the next indexing is done.</p>
 
+<code>
+<pre>
 cd /tmp
 reindex -a 
+</pre>
+</code>
 
 <p><strong>How to add support for CJK (Chinese, Japanese, and Korean) languages?</strong></p>
 
-Fix the sphinx indexer settings, ie. add the following two lines to all “index” sections in sphinx.conf:
+Fix the sphinx indexer settings, ie. add the following two lines to all “index” sections in sphinx.conf:</p>
 
+<code>
+<pre>
 ngram_len = 1
 ngram_chars = U+3000..U+2FA1F
+</pre>
+</code>
 
-Finally chdir to /tmp, the reindex everything as the piler user.
+Finally chdir to /tmp, the reindex everything as the piler user.</p>
 
 <code>
 <pre>
@@ -263,21 +313,21 @@ reindex -a
 
 <p><strong>I get a lot of “Format a4 is redefined”, and other messages when importing.</strong></p>
 
-These warning or errors come from the external helper utilities, eg. pdftotext.
+<p>These warning or errors come from the external helper utilities, eg. pdftotext.</p>
 
-They are usually harmless, since piler is interested in only the textual part. However in case of a worst case scenario the given attachment is simply not indexed, and thus is not searchable, but the email is archived, and can be retrieved without any problem.
+<p>They are usually harmless, since piler is interested in only the textual part. However in case of a worst case scenario the given attachment is simply not indexed, and thus is not searchable, but the email is archived, and can be retrieved without any problem.</p>
 
 <p><strong>Outlook 2007 can't open a downloaded EML file.</strong></p>
 
-Check out http://www.msoutlook.info/question/354 for a registry hack.</p>
+<p>Check out <a href="http://www.msoutlook.info/question/354" target="blank">http://www.msoutlook.info/question/354</a> for a registry hack.</p>
 
 <p><strong>You get the following error: “Error: SQLSTATE[HY000] [2003] Can't connect to MySQL server on '127.0.0.1' (111) on database: sphinx”</strong></p>
 
-Start searchd
+<p>Start searchd</p>
 
 <p><strong>I have Centos / Redhat, and when I click on the “Apply” button in the gui, it says: “add the following to /etc/sudoers: 'www-data all=NOPASSWD: /etc/init.d/rc.piler reload'“</strong></p>
 
-Add the following to /etc/sudoers:
+<p>Add the following to /etc/sudoers:</p>
 
 <code>
 <pre>
@@ -288,9 +338,13 @@ Defaults:%apache !requiretty
 
 <p><strong>I get the following warning in mysql logs:</strong></p>
 
+<code>
+<pre>
 [Warning] Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT. REPLACE# SELECT is unsafe because the order in which rows are retrieved by the SELECT determines which (if any) rows are replaced. This order cannot be predicted and may differ on master and the slave. Statement: REPLACE INTO sph_counter (counter_id, max_doc_id) SELECT 1, MAX(id) FROM sph_index
+</pre>
+</code>
 
-Try setting MIXED format for binlog_format in the my.cnf file
+<p>Try setting MIXED format for binlog_format in the my.cnf file</p>
 
 <code>
 <pre>
