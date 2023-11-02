@@ -2,12 +2,12 @@ Archiving
 
 - Built-in SMTP server
 - STARTTLS support
-- Virus checking
+- Virus checking (using clamav)
 - Exclusion (formerly: archiving) rules
 - Retention rules
 - Attachment deduplication
 - Zlib compression
-- AES-256 encryption (Blowfish for legacy emails)
+- AES-256 encryption (formerly: Blowfish)
 - Digital signing and verification
 
 ### Searching
@@ -42,5 +42,5 @@ Archiving
 ### Import / Export
 
 - Export to EML format
-- Import from PST, EML and mailbox format
+- Import from PST (using readpst), EML and mailbox format
 - Import from POP3/IMAP account

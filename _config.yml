@@ -3,7 +3,7 @@ owner: Janos SUTO
 email: sj@acts.hu
 metakeywords: open source email archiving solution,archive email,enterprise email archive,email archiving software,email retention laws,email retention policies,email archiving,enterprise information archiving,enterprise email management
 metadescription: piler email archiver
-exclude: [README, TODO, misc]
+exclude: [README, TODO]
 plugins:
   - jekyll-paginate-v2
 

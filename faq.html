@@ -16,7 +16,7 @@ title: FAQ
 
 <p>If you know that's the case for you in advance, then try using xfs with blocksize of 1024.</p>
 
-<p>See more at https://bitbucket.org/jsuto/piler/issues/961/archive-size-mismatch</p>
+<p>See more at <a href="https://bitbucket.org/jsuto/piler/issues/961/archive-size-mismatch" target="_blank">https://bitbucket.org/jsuto/piler/issues/961/archive-size-mismatch</a></p>
 
 <h3>What performance can piler achieve?</h3>
 
@@ -56,7 +56,7 @@ update metadata set retained = sent + 86400*180;
 pilerimport -u '“User Name”' ...
 </code>
 
-<p>See https://bitbucket.org/jsuto/piler/issues/952/pilerimport-imap-username-cannot-contain for more.</p>
+<p>See <a href="https://bitbucket.org/jsuto/piler/issues/952/pilerimport-imap-username-cannot-contain" target="_blank">https://bitbucket.org/jsuto/piler/issues/952/pilerimport-imap-username-cannot-contain</a> for more.</p>
 
 
 <h3>What are the recommended mysql settings?</h3>
@@ -141,36 +141,39 @@ ALTER TABLE table_name CHANGE column_name column_name VARCHAR(191) CHARACTER SET
 
 <p>Follow these instructions to figure out if you really lost your emails. Chances are that you haven't!</p>
 
-    check the metadata table, and verify that your emails are there
-    find some of your “lost” emails under the /var/piler/store/00 directory. The files are named based on the their metadata.piler_id value. If you can find them, then your emails are in the archive.
-    double check with the pilerget utility, ie. if eg. pilerget 4000000057950fd127ea028c005a30f2f951 returns the email (don't forget to use your *actual* piler_id!), then the email is in the archive
-    check the sphinx database (not a mysql database, sphinx has its own database which can be accessed with mysql -h 127.0.0.1 -P 9306) if the older IDs (the same as in metadata.id) are present: select * from main1,dailydelta1,delta1 where id=123 (also use the actual id!)
+<ul>
+  <li>check the metadata table, and verify that your emails are there</li>
+  <li>find some of your “lost” emails under the /var/piler/store/00 directory. The files are named based on the their metadata.piler_id value. If you can find them, then your emails are in the archive.</li>
+  <li>double check with the pilerget utility, ie. if eg. <code>pilerget 4000000057950fd127ea028c005a30f2f951</code> returns the email (don't forget to use your *actual* piler_id!), then the email is in the archive</li>
+  <li>check the sphinx database (not a mysql database, sphinx has its own database which can be accessed with <code>mysql -h 127.0.0.1 -P 9306</code>) if the older IDs (the same as in metadata.id) are present: <code>select * from main1,dailydelta1,delta1 where id=123;</code> (also use the actual id!)</li>
+</ul>
+
 
 <h3>Why am I getting a “cannot write current directory!” message?</h3>
 
-<p>Most of the piler binaries are setuid/setgid to piler:piler in order to read/write the store directory. It means that these commands run as user/group piler. The above error message is pretty self explaining: the piler user can't write the current directory. Solution: cd /tmp or cd /var/tmp or cd /var/piler/imap, ie. cd to a directory where piler has rwx permissions.</p>
+<p>Most of the piler binaries are setuid/setgid to piler:piler in order to read/write the store directory. It means that these commands run as user/group piler. The above error message is pretty self explaining: the piler user can't write the current directory. Solution: <code>cd /tmp</code> or <code>cd /var/piler/imap</code>, ie. cd to a directory where piler has rwx permissions.</p>
 
 <h3>What's the 'master branch'?</h3>
 
-The master branch is the developer version of piler, kinda the nightly build. This contains all the latest (and probably unstable) code. It doesn't mean that the master branch is a buggy crap, however it does mean that the code is not in its final shape. Just with any other software, unless you are told otherwise, please use a stable version.</p>
+<p>The master branch is the developer version of piler, kinda the nightly build. This contains all the latest (and probably unstable) code. It doesn't mean that the master branch is a buggy crap, however it does mean that the code is not in its final shape. Just with any other software, unless you are told otherwise, please use a stable version.</p>
 
-<h3>What archive and retention rule do I need to archive every email, and keep them for 5 years?</h3>
+<h3>What exclusion (formerly: archive) and retention rule do I need to archive every email, and keep them for 5 years?</h3>
 
-By default piler archives everything it receives, so you don't need any rules for that. In fact, the archiving rules define what NOT to archive. Also the default_retention_days value in piler.conf applies to all emails, unless it's overridden in the retention rules. So in this just set default_retention_days=1827, restart piler, and you are fine.</p>
+<p>By default piler archives everything it receives, so you don't need any rules for that. In fact, the exclusion (formerly: archiving) rules define what NOT to archive. Also the default_retention_days value in piler.conf applies to all emails, unless it's overridden in the retention rules. So in this just set <code>default_retention_days=1827</code>, restart piler, and you are fine.</p>
 
 <h3>I can see lots of duplicates in the archive</h3>
 
-The duplicate detection is based on the Message-ID header field. If the piler daemon detects an already known message-id, then it discards the email. As you can see, the Message-ID header is crucial. The piler daemon may archive a single message with a missing message-id field, and discards the subsequent messages having no message-id.</p>
+<p>The duplicate detection is based on the Message-ID header field. If the piler daemon detects an already known message-id, then it discards the email. As you can see, the Message-ID header is crucial. The piler daemon may archive a single message with a missing message-id field, and discards the subsequent messages having no message-id.</p>
 
-The pilerimport utility, however, accepts messages even without message-id, because it assumes you really want to archive those messages. So be sure to remove any duplicates before importing them with pilerimport, otherwise you'll have duplicates in the archive.</p>
+<p>The pilerimport utility, however, accepts messages even without message-id, because it assumes you really want to archive those messages. So be sure to remove any duplicates before importing them with pilerimport, otherwise you'll have duplicates in the archive.</p>
 
-The only negative side effect is the extra resources required, eg. disk space, memory, etc.</p>
+<p>The only negative side effect is the extra resources required, eg. disk space, memory, etc.</p>
 
-Some internal email sending applications don't know how to create a valid email header, and neglect the message-id. They should be fixed ASAP!</p>
+<p>Some internal email sending applications don't know how to create a valid email header, and neglect the message-id. They should be fixed ASAP!</p>
 
 <h3>I don't have a /var partition, how to make the disk space projection work?</h3>
 
-Set the following in config-site.php:</p>
+<p>Set the following in config-site.php:</p>
 
 <code>
 </pre>
@@ -180,17 +183,21 @@ $config['DATA_PARTITION'] = '/';
 
 <h3>I've just sent a few test emails, however no search results in the gui</h3>
 
-The piler daemon processes email as soon as they are received. However emails are indexed in every 30 mins. So an email is visible in the GUI 30 mins. You may adjust the indexing frequency by editing the cron jobs of piler.</p>
+<p>The piler daemon processes email as soon as they are received. However emails are indexed in every 30 mins. So an email is visible in the GUI 30 mins. You may adjust the indexing frequency by editing the cron jobs of piler.</p>
+
+<p>Note that piler supports manticore as a drop-in replacement of sphinx. Also, both manticore and sphinx supports real-time (RT) index data. In that case you don't need the indexer jobs in crontab, and the archived emails are visible in the gui immediately.</p>
 
 <h3>I can't see any results, however the sphinx query in the maillog reports 0 hits, and &gt;0 total found:</h3>
 
+<code>
 Aug 11 20:21:36 mailpiler piler-webui[10670]: sphinx query: 'SELECT id FROM main1,dailydelta1,delta1 WHERE MATCH('@(subject,body)  whatever I need') ORDER BY `sent` DESC LIMIT 0,1000 OPTION max_matches=1000' in 0.29 s, 0 hits, 25508 total found
+</code>
 
-You use an outdated and not supported version of sphinx, typically 2.0.x on Debian or Ubuntu. Make sure you have a recent 2.2.x version. You may download it from http://sphinxsearch.com/downloads/release/.</p>
+<p>You use an outdated and not supported version of sphinx, typically 2.0.x on older Debian or Ubuntu releases. Make sure you have a recent 3.x version, or even manticore search 6.x. You may download it from http://sphinxsearch.com/downloads/release/.</p>
 
 <h3>I want to see more hits!</h3>
 
-Edit config-site.php, and set MAX_SEARCH_HITS, eg.:</p>
+<p>Edit config-site.php, and set MAX_SEARCH_HITS, eg.:</p>
 
 <code>
 <pre>
@@ -198,11 +205,11 @@ $config['MAX_SEARCH_HITS'] = 2000;
 </pre>
 </code>
 
-Note that you should keep this number to a sane value, the bigger it is the more resources you need for both searchd and php.</p>
+<p>Note that you should keep this number to a sane value, the bigger it is the more resources you need for both searchd and php.</p>
 
 <h3>I forgot the admin@local password</h3>
 
-Connect to the piler database, and set the crypted password manually, eg:</p>
+<p>Connect to the piler database, and set the crypted password manually, eg:</p>
 
 <code>
 <pre>
@@ -210,13 +217,13 @@ mysql&gt; update user set password='$5$TXL7EX$s17XtxwbCs1MDAzuulF/STauTkH0h/KJGH
 </pre>
 </code>
 
-The above crypted password sets the admin@local password to <strong>pilerrocks</h3>
+<p>The above crypted password sets the admin@local password to <strong>pilerrocks</strong></h3>
 
 <h3>How can I delete everything from the archive?</h3>
 
-Follow the procedure below to do so, and it will reset the archive as if it were freshly installed.</p>
+<p>Follow the procedure below to do so, and it will reset the archive as if it were freshly installed.</p>
 
-#1: Stop searchd and piler:</p>
+<p>#1: Stop searchd and piler:</p>
 
 <code>
 <pre>
@@ -225,7 +232,7 @@ Follow the procedure below to do so, and it will reset the archive as if it were
 </pre>
 </code>
 
-#2: Remove stored emails:</p>
+<p>#2: Remove stored emails:</p>
 
 <code>
 <pre>
@@ -233,7 +240,7 @@ rm -rf /var/piler/store/00/*
 </pre>
 </code>
 
-#3: Drop and recreate the piler database:</p>
+<p>#3: Drop and recreate the piler database:</p>
 
 <code>
 <pre>
@@ -244,7 +251,7 @@ mysql -u piler -p piler &lt; /path/to/piler-source-directory/util/db-mysql.sql
 </pre>
 </code>
 
-#4: Reset the sphinx index data</p>
+<p>#4: Reset the sphinx index data</p>
 
 <code>
 <pre>
@@ -254,7 +261,7 @@ indexer --all
 </pre>
 </code>
 
-#5: Start searchd and piler:</p>
+<p>#5: Start searchd and piler:</p>
 
 <code>
 <pre>
@@ -265,7 +272,7 @@ indexer --all
 
 <h3>Qmail (using as a smarthost) rejects emails from piler saying: 451 See http://pobox.com/~djb/docs/smtplf.html</h3>
 
-Set the following in config-site.php:</p>
+<p>Set the following in config-site.php:</p>
 
 <code>
 <pre>
@@ -275,13 +282,13 @@ $config['EOL'] = "\r\n";
 
 <h3>I can see only today's emails in the archive and not any single previous emails.</h3>
 
-Some Linux distributions (notably Debian and Ubuntu) have a daily cron job to reindex everything. Unfortunately this ruins the sphinx index files piler relies on. However the older emails are not lost you still have them, they are just disappeared from the sphinx index. To bring them back, perform the following steps.</p>
+<p>Some Linux distributions (notably Debian and Ubuntu) have a daily cron job to reindex everything. Unfortunately this ruins the sphinx index files piler relies on. However the older emails are not lost you still have them, they are just disappeared from the sphinx index. To bring them back, perform the following steps.</p>
 
-1. Edit /etc/default/sphinxsearch, and set START=“no”.</p>
+<p>1. Edit /etc/default/sphinxsearch, and set <code>START="no"</code>.</p>
 
-I recommend you to use the piler shipped init.d/rc.searchd script to start searchd. You may call it from /etc/rc.local. (Note that it starts it as user piler, so make sure /var/piler/sphinx has proper ownership.)</p>
+<p>I recommend you to use the piler shipped init.d/rc.searchd script to start searchd. You may call it from /etc/rc.local. (Note that it starts it as user piler, so make sure /var/piler/sphinx has proper ownership.) Or you may use the systemd services for piler, see the systemd dir in the piler source code.</p>
 
-2. Reindex old emails. After that older emails should appear after the next indexing is done.</p>
+<p>2. Reindex old emails. After that older emails should appear after the next indexing is done.</p>
 
 <code>
 <pre>
@@ -292,7 +299,7 @@ reindex -a
 
 <h3>How to add support for CJK (Chinese, Japanese, and Korean) languages?</h3>
 
-Fix the sphinx indexer settings, ie. add the following two lines to all “index” sections in sphinx.conf:</p>
+<p>Fix the sphinx indexer settings, ie. add the following two lines to all “index” sections in sphinx.conf:</p>
 
 <code>
 <pre>
@@ -339,9 +346,7 @@ Defaults:%apache !requiretty
 <h3>I get the following warning in mysql logs:</h3>
 
 <code>
-<pre>
-[Warning] Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT. REPLACE# SELECT is unsafe because the order in which rows are retrieved by the SELECT determines which (if any) rows are replaced. This order cannot be predicted and may differ on master and the slave. Statement: REPLACE INTO sph_counter (counter_id, max_doc_id) SELECT 1, MAX(id) FROM sph_index
-</pre>
+<p>[Warning] Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT. REPLACE# SELECT is unsafe because the order in which rows are retrieved by the SELECT determines which (if any) rows are replaced. This order cannot be predicted and may differ on master and the slave. Statement: REPLACE INTO sph_counter (counter_id, max_doc_id) SELECT 1, MAX(id) FROM sph_index</p>
 </code>
 
 <p>Try setting MIXED format for binlog_format in the my.cnf file</p>
@@ -358,7 +363,7 @@ binlog_format = MIXED
 
 <h3>I have lots of email addresses (100+) in the search query, and the query in the mail log is truncated, not ending with LIMIT xx,yy</h3>
 
-<p>Increase the thread_stack variable, and restart the searchd daemon. Be sure to read http://sphinxsearch.com/docs/latest/conf-thread-stack.html!</p>
+<p>Increase the thread_stack variable, and restart the searchd daemon. Be sure to read <a href="https://sphinxsearch.com/docs/latest/conf-thread-stack.html" target="_blank">https://sphinxsearch.com/docs/latest/conf-thread-stack.html</a>!</p>
 
 <h3>After importing EML files extracted from a PST file, some emails have “From: 'Some Name' <MAILER-DEAMON>” (or the To: field is “redacted”) in the email header.</h3>
 
@@ -376,4 +381,4 @@ show index delta1 status like 'ram_bytes';
 </pre>
 </code>
 
-<p>See the explantion at <a href="http://sphinxsearch.com/blog/2011/11/11/sphinx-memory-consumption/" target="_blank">http://sphinxsearch.com/blog/2011/11/11/sphinx-memory-consumption/</a>.</p>
+<p>See the explantion at <a href="https://sphinxsearch.com/blog/2011/11/11/sphinx-memory-consumption/" target="_blank">https://sphinxsearch.com/blog/2011/11/11/sphinx-memory-consumption/</a>.</p>
