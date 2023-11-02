@@ -51,7 +51,7 @@ The used filesystem is not a concern, however if you choose XFS, then be aware o
 
 Note that piler stores all emails and attachments as separate files. You may tweak inode ratio, if necessary.
 
-See https://bitbucket.org/jsuto/piler/issues/961/archive-size-mismatch for some additional hints.
+See [https://bitbucket.org/jsuto/piler/issues/961/archive-size-mismatch](https://bitbucket.org/jsuto/piler/issues/961/archive-size-mismatch) for some additional hints.
 
 Create a dedicated and non-privileged user to run piler
 
@@ -75,7 +75,7 @@ ldconfig
 
 Make sure your system looks in /usr/local/lib for shared libraries! If not, then add this path to /etc/ld.so.conf.d/piler.conf.
 
-Note: If you use Percona version of mysql, you may switch to the XtraDB engine. To do this, execute the following command before creating the tables:
+Note: If you use [Percona version](http://www.percona.com/software/percona-server/) of mysql, you may switch to the XtraDB engine. To do this, execute the following command before creating the tables:
 
 ```
 sed -i 's/InnoDB/XtraDB/g' util/db-mysql.sql
