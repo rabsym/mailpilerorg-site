@@ -72,6 +72,11 @@ To import all email except from the folder 'Draft' from imap server 1.2.3.4 usin
 pilerimport -i 1.2.3.4 -u joe -p secretpassword -x draft
 ```
 
+**Notes**
+
+The recommended tool to use for imap import is either imapfetch.py shipped by piler, or another external tool.
+Let them download emails via IMAP protocol, then run pilerimport to process the downloaded files.
+
 Import messages from a POP3 server:
 
 ```

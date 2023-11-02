@@ -1,6 +1,6 @@
 The delta indexer runs every 30 mins. It means that the search results in GUI also are updated every 30 mins.
 
-Users can access the archived emails using a browser. They have to login using any of their known email address and the password. They can set the preferred language - currently English, (Brazilian) Portuguise, and Hungarian are supported - page length and theme.
+Users can access the archived emails using a browser. They have to login using any of their known email address and the password. They can set the preferred language - currently English, Czech, German, Italian, Polish, (Brazilian) Portuguise, Russian, Spanish, Turkish, Taiwanian, and Hungarian are supported - page length and theme.
 
 By default users can enter the search terms into a text field, and the web interface splits them into components, guesses the format of the components, and builds up a search query. If you type 2012-01-31 then it knows it's a date. If it has @ sign, then it's an email address.
 
@@ -91,7 +91,7 @@ cat | dog = having cat or dog
 cat << dog = before operator: cat has to precede dog
 ```
 
-See 5.2. Boolean query syntax and 5.3. Extended query syntax for more details on the sphinx search site.
+See [5.2. Boolean query syntax](https://sphinxsearch.com/docs/latest/boolean-syntax.html) and [5.3. Extended query syntax](https://sphinxsearch.com/docs/latest/extended-syntax.html) for more details on the sphinx search site.
 
 ### Using the search results
 

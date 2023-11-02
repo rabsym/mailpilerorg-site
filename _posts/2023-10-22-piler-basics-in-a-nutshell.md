@@ -8,7 +8,9 @@ How do emails get to the archive? You configure your email server to pass a copy
 
 When an email is received, then it's parsed, disassembled, compressed, encrypted, and finally stored in the file system: one file for every email and attachment. Also, the textual data is written to the sph_index table. The periodic indexer job reads the sph_index table, and updates the sphinx databases.
 
-The GUI uses sphinx and mysql database to return the search results to the users.
+Note that recent piler releases (1.4+) support real-time index data. Using this feature, we don't need the periodic indexer jobs to run, and the archived emails are visible immediately on the GUI.
+
+The GUI uses manticore (or sphinx) and mysql database to return the search results to the users.
 
 Piler has a built-in access control to prevent a user to access other's messages. Auditors can see every archived email. Piler parses the header and extracts the From:, To: and Cc: addresses (in case of From: it only stores the first email address, since some spammers include tons of addresses in the From: field), and when a user searches for his emails then piler tries to match his email addresses against the email addresses in the messages. To sum it up, a regular user can see only the emails he sent or received.
 

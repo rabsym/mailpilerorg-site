@@ -5,9 +5,9 @@ This document refers to what data the piler archive collects. If you want to rea
 The piler archives emails which might contain sensitive data. The archive uses the following measures to protect your data:
 
 - using TLS encryption during the smtp transaction if the smtp client supports it (set tls_enable=1 in piler.conf, and create piler.pem)
-- the piler smtp daemon supports tcp_wrappers library to limit access to who can send emails to the archive
+- the piler smtp daemon supports smtp acl lists to limit access to who can send emails to the archive
 - pilerimport supports both pop3 and imap over TLS
-- all stored emails are encrypted using a 256 bit long key using the AES algorithm (Note: 128 bit Blowfish for legacy emails)
+- all stored emails are encrypted using a 256 bit long key using the AES algorithm (Note: 128 bit Blowfish for legacy archived emails with older piler releases)
 - all emails are accessible for user piler only (not counting root privileged accounts)
 - the piler daemons syslog the smtp client address, the recipients of the email, the smtp commands in the transaction, message-id of the email, number of attachments
 - the textual content of the email is written to a mysql table first. This table is read and then emptied by the indexer utility writing a sphinx index database

@@ -31,3 +31,5 @@ If you delete a message with pilerpurge.py, then it's removed from the /var/pile
 This is where the sphinx killlist feature comes in. It instructs sphinx to discard or suppress the removed email from the results. Note that this suppression might be delayed until the next time the delta indexer runs, ie. 30 mins.
 
 So rebuilding the sphinx indices is not necessary just to eliminate the removed messaged from the search hits. However, if you have lots of aged messages, and you want to reduce the size of the sphinx index, then it might be a good a idea to reindex. If you decide to do so, be sure to backup the current sphinx data, ie. the /var/piler/sphinx directory.
+
+If you use RT index, then the pilerpurge.py utility will remove stale entries from the manticore index.

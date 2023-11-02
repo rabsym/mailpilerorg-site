@@ -2,6 +2,9 @@
 
 This is a troubleshooting task, use it only when you have to or you are advised to rebuild the sphinx index from scratch.
 
+It's highly recommended that you backup at least the /var/piler/{sphinx,manticore}/main*.* files, or
+the complete /var/piler/manticore directory in case of an RT index.
+
 Piler relies heavily on the sphinx index data. The reindex utility is for healing it if anything goes wrong.
 
 The reindex utility reads data from the metadata table, then retrieves the files from the /var/piler/store directory. Then it parses them again, and puts data to be indexed to the sph_index table, so the sphinx indexer utility can reindex these messages.

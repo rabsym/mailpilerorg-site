@@ -4,9 +4,7 @@ piler allows you to access only your emails you either sent or received. It's of
 
 Thus when Alice logs in both Bob's and Jim's email addresses are added to her allowed to see email addresses, so Alice can read Bob's emails, and Jim's emails, and of course her own emails as well.
 
-```
-admin@local permissions
-```
+### admin@local permissions
 
 Sometimes it's not feasible if the built-in (or any) administrator has access to any email piler has archived. So the administrators can see only their own emails (and anything their membership allows). If you need a user who can access anyone's emails then grant him AUDITOR privileges on the user settings page.
 
@@ -102,7 +100,7 @@ $langs = array(
              );
 ```
 
-### How to make a custom skin to piler?
+### How to make a custom skin to piler? (obsoleted)
 
 Copy the style-default.css file, then edit it, eg.
 

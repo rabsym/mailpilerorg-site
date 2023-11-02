@@ -149,9 +149,11 @@ mailarchive:
   unseen
 ```
 
-IMPORTANT! Make sure you never lose/overwrite the key otherwise you won't access your archive ever again. So whenever you upgrade be sure to keep your existing key file. Also NEVER change the iv parameter in piler.conf after installation. The piler mysql database contains essential information, including metadata, permissions, tags, etc. If you lost the piler database, your archive would stop working! So you must take a good care of the piler database.
+### IMPORTANT!
 
-## Website postinstall tasks
+Make sure you never lose/overwrite the key otherwise you won't access your archive ever again. So whenever you upgrade be sure to keep your existing key file. Also NEVER change the iv parameter in piler.conf after installation. The piler mysql database contains essential information, including metadata, permissions, tags, etc. If you lost the piler database, your archive would stop working! So you must take a good care of the piler database.
+
+### Website postinstall tasks
 
 This task depends greatly on what webserver you use. Basically you have to create a virtualhost dedicated to piler, and enable rewriting rules. The piler GUI expects to be in the DocumentRoot not in a subdirectory. Example webserver configurations are available in the contrib/webserver/ directory.
 

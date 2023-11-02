@@ -10,3 +10,4 @@ The selected messages will appear gray to visually indicate the mark for removal
 
 Then when the daily purge utility runs, it will remove the email physically from the archive. The purged email also needs to be cleared from the Sphinx database. It happens after the next main index merge.
 
+In case of an RT index, the pilerpurge.py utility removes the stale index entries.
