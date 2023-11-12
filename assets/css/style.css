@@ -33,6 +33,8 @@ h3 { padding-top: 20px;}
 .highlight pre {color: #9bddff;}
 .card-multitenant {width: 30rem;}
 .btn-download {width: 250px; margin-bottom: 10px;}
+.modal-header, .modal-body, .modal-footer {background: #292929; color:#edede9;}
+
 /*--------------------------------------------------------------
 # Back to top button
 --------------------------------------------------------------*/

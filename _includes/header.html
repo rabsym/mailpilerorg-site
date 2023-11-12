@@ -11,6 +11,12 @@
   <li><a class="nav-link scrollto " href="{{ item.link }}" @click="close_mobile_menu" {% if page.url == item.link %}style="color: #ffc451;"{% endif %}>{{ item.name }}</a></li>
   {% endfor %}
 
+          <li>
+            <form @submit.prevent="search">
+              <input class="form-control form-control-sm ms-2 scrollto" type="text" v-model="search_criteria" placeholder="search" aria-label="search">
+            </form>
+          </li>
+
         </ul>
 
         <i class="bi mobile-nav-toggle" :class="{'bi-list': !mobile_navbar_open, 'bi-x': mobile_navbar_open}" @click="toggle_mobile_menu"></i>
@@ -30,5 +36,26 @@
         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
       <div id="toast-msg" class="toast-body"></div>
+    </div>
+  </div>
+
+  <!-- search results modal -->
+
+  <div id="searchResultsModal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Search results: {% raw %}{{ num_search_results }}{% endraw %}</h5>
+        </div>
+        <div class="modal-body">
+          <div class="row" v-for="a in search_results">
+             <p><a :href="{% raw %}a.url{% endraw %}"><span v-html="a.title"></span></a></p>
+             <p><span v-html="a.body"></span></a></p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
     </div>
   </div>

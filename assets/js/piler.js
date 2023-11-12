@@ -2,6 +2,8 @@ const viewer = axios.create({ baseURL: location.origin, timeout: 30000 })
 const uri = 'https://helper.mailpiler.com/1.php'
 const msg_button_default_text = 'Send message'
 const msg_button_sending_text = 'MESSAGE IS BEING SENT'
+const search_uri = 'https://helper.mailpiler.com/search.php'
+const search_index = 'mailpilerorg'
 
 let tt = '' // cf turnstile token
 
@@ -35,6 +37,26 @@ function get_turnstile_token(token) {
   tt = token
 }
 
+function hide_modal(id = '') {
+  try {
+    let modalId = document.getElementById(id)
+    const modal = bootstrap.Modal.getOrCreateInstance(modalId)
+    modal.hide()
+  } catch(e) {
+    log(e)
+  }
+}
+
+function show_modal(id = '') {
+  try {
+    let modalId = document.getElementById(id)
+    const modal = bootstrap.Modal.getOrCreateInstance(modalId)
+    modal.show()
+  } catch(e) {
+    log(e)
+  }
+}
+
 const app = Vue.createApp({
   computed: {
     page_id: function() {
@@ -50,6 +72,9 @@ const app = Vue.createApp({
         multitenancy: 'no'
       },
       mobile_navbar_open: false,
+      search_criteria: '',
+      search_results: [],
+      num_search_results: 0,
       system: {},
       turnstile: {
         sitekey: '0x4AAAAAAAMROBjRw8PPfd7x'
@@ -142,6 +167,22 @@ const app = Vue.createApp({
         toastBootstrap.show()
       }
     },
+
+    async search() {
+      console.log("[search]", this.search_index, this.search_criteria)
+      try {
+        const params = new URLSearchParams({index: search_index, search: this.search_criteria})
+        let response = await viewer.post(search_uri, params)
+        assert(response.data.error === '', response.data.error)
+        let results = response.data
+        this.num_search_results = results.total
+        assert(this.num_search_results > 0, "No search results")
+        this.search_results = results.data
+        show_modal('searchResultsModal')
+      } catch(e) {
+        this.show_message("Failed to search", e)
+      }
+    }
 
   },
 
