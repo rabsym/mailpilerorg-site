@@ -8,7 +8,7 @@ Mandatory:
 
 - openssl
 - MySQL 5.5+, MariaDB or Percona
-- manticore 6.x (Sphinx 2.2.x and 3.x are still supported)
+- manticore 6.x
 - php 8.x (with the following modules: LDAP, GD, Memcache, PDO, MySQL, CURL, Zip) (PHP 7.x is still supported)
 - a rewriting rule capable webserver, eg. apache, lighttpd, nginx, … (in case of apache be sure to enable the rewrite module)
 - TRE regex library 0.8.x
