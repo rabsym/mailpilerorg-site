@@ -46,6 +46,11 @@ spam: 0
 
 When piler starts it reads the archiving rules and compiles them at startup. So if you change the archiving rules, be sure to send a HUP signal to `cat /var/run/piler/piler.pid` to have piler re-read the rules.
 
+Additional notes
+
+- If a field is left empty, it doesnt get matched
+- In From/To @example.com will match every email to or from this domain, it has not to be a specific email address
+
 ### Retention rules
 
 How long shall piler retain your messages? You may control it with the retention rules. The format is exactly the same as with the archiving rules: you can define the From:, To/Cc:, Subject:, message size, etc. and the retention period in days.
