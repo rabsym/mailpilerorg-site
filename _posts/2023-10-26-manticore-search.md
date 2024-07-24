@@ -29,3 +29,10 @@ sphxdb=piler1
 sphxhost=127.0.0.1
 sphxport=9306
 ```
+
+After installing manticore, be sure to disable the shipped service to allow the piler
+shipped manticore config to run:
+
+```
+systemctl stop manticore
+```
