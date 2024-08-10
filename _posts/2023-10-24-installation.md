@@ -27,7 +27,6 @@ Highly recommended:
 
 Optional:
 
-- xcache
 - clamav
 - libpst
 
