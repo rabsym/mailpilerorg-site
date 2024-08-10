@@ -16,17 +16,16 @@ Mandatory:
 - mpstat utility (eg. the 'sysstat' package on Debian Linux)
 - python3 with mysqldb support (python3-mysqldb package on debian/ubuntu)
 
-Highly recommended:
+Recommended attachment extractor utilities:
 
 - catdoc
 - pdftotext
 - unrtf
 - tnef
 - [xlhtml (with sj mods)](https://download.mailpiler.com/generic-local/xlhtml-0.5.1-sj-mod.tar.gz)
-- memcached
 
 Optional:
-
+- memcached
 - clamav
 - libpst
 
