@@ -22,7 +22,7 @@ Highly recommended:
 - pdftotext
 - unrtf
 - tnef
-- xlhtml (with sj mods)
+- [xlhtml (with sj mods)](https://download.mailpiler.com/generic-local/xlhtml-0.5.1-sj-mod.tar.gz)
 - memcached
 
 Optional:
