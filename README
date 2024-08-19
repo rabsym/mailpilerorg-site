@@ -1,4 +1,2 @@
-docker run --rm -v /opt/www/mailpilerorg-jekyll:/aaa -w /aaa sutoj/jekyll:latest jekyll build
-
-- Proof read all text in the wiki, update what's necessary, eg. imapfetch.py for importing doc
-- Fix the css stuff to make it good looking
+This repo contains the source code for the www.mailpiler.org website.
+It's based on Jekyll to generate the static content.
