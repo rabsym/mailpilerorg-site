@@ -6,19 +6,12 @@ The following example adds a 2nd domain name to your email addresses. Let's say 
 $config['CUSTOM_EMAIL_QUERY_FUNCTION'] = 'my_custom_func';
 
 function my_custom_func($username = '') {
-   $session = Registry::get('session');
-   $data = $session->get("auth_data");
+   $a = array($username);
 
-   $a = array();
+   $s = explode("@", $username);
+   array_push($a, $s[0] . "@otherdomain.com");
 
-   foreach($data['emails'] as $email) {
-      $s = explode("@", $email);
-      array_push($a, $s[0] . "@otherdomain.com");
-   }
-
-   $data['emails'] = array_merge($data['emails'] , $a);
-
-   $session->set("auth_data", $data);
+   return $a;
 }
 ```
 
@@ -28,27 +21,10 @@ The next example assumes an IMAP server that expects only the username part with
 $config['CUSTOM_EMAIL_QUERY_FUNCTION'] = 'my_custom_func';
 
 function my_custom_func($username = '') {
-   $session = Registry::get('session');
-   $data = $session->get("auth_data");
 
    if(!strstr($username, '@local')) {
       $email = $username . '@example.com';
-      $data['emails'] = [$email];
-      $session->set("auth_data", $data);
-   }
-}
-```
-
-If you want to change some aspects of the gui before the authentication takes place, then write a similar function. The following example would allow logins from a certain domain only, and reject others:
-
-```
-$config['CUSTOM_EMAIL_QUERY_FUNCTION'] = 'iii';
-
-function iii($username = '') {
-   global $session;
-
-   if(!strstr($username, "@domain.com")) {
-      $session->set("auth_data", array());
+      return array($email);
    }
 }
 ```
