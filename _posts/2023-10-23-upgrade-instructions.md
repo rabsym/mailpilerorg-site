@@ -287,3 +287,37 @@ And add the following jobs to piler's crontab:
 3 * * * * /usr/local/libexec/piler/watch_sphinx_main_index.sh
 ```
 
+## from 1.4.5 to 1.4.6 in docker deployment
+
+Due to a change in the underlying image (moving from ubuntu 22.04 LTS to 24.04 LTS) the uid/gid of the `piler` user changed from `1000` to `1001`. So effectively all docker volumes need their file system owners updated manually:
+```
+chown -R 1001:1001 <volume_folder>
+```
+
+Further more the index for the auditor table was changed from sql to manticore. So the following section must be added to `/etc/piler/manticore.conf` if not present:
+```
+index audit1
+{
+    type = rt
+    path = /var/piler/manticore/audit1
+    rt_mem_limit = 16M
+    stored_fields = *
+    min_word_len = 2
+    min_prefix_len = 5
+    charset_table  = <?php print CHARSET_TABLE; ?>
+    rt_field = email
+    rt_field = ipaddr
+    rt_field = description
+    rt_attr_bigint = ts
+    rt_attr_bigint = meta_id
+    rt_attr_uint = action
+}
+```
+If you have any local copies of `/etc/piler/config-site.php` then don't forget to add `$config['SPHINX_AUDIT_INDEX'] = 'audit1';` to reflect the change.
+
+Last but not least the new docker image comes with **php 8.3** while 8.1 was used in piler 1.4.5 image. So make sure to configure `/etc/piler/piler-nginx.conf` with the correct php version:
+```
+            ...
+            fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+            ...
+```
