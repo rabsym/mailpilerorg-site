@@ -321,3 +321,43 @@ Last but not least the new docker image comes with **php 8.3** while 8.1 was use
             fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
             ...
 ```
+
+## from 1.4.6 to 1.4.7 in docker deployment
+
+The manticore index is moved to a seperate container. So you need to adjust your `docker-compose.yaml` file:
+
+Add a new service **manticore**:
+```
+  manticore:
+    image: manticoresearch/manticore:6.3.2
+    container_name: manticore
+    restart: unless-stopped
+    volumes:
+      - ./manticore.conf:/etc/manticoresearch/manticore.conf
+      - piler_manticore:/var/lib/manticore
+    deploy:
+      resources:
+        reservations:
+          memory: 512M
+        limits:
+          memory: 512M
+```
+Create a file `./manticore.conf` in your project directory and use the content from here: https://github.com/jsuto/piler/blob/piler-1.4.7/docker/manticore.conf
+
+Adjust the service **piler** in your `docker-compose.yaml` and add the environment variable `MANTICORE_HOSTNAME=manticore` and remove the volume `piler_manticore` as this exact volume will be used with the **manticore** service from now on.
+
+In order for the new docker container to pick up the existing data it's unix owner/group must be adjusted:
+```
+chown -R 999:999 <your_piler_manticore_volume>
+```
+Also be sure to update `/etc/piler/piler.conf` within the piler container, and set
+```
+sphxhost=manticore
+```
+
+Make sure your `/etc/piler/config-site.php` contains the following lines:
+```
+$config['SPHINX_HOSTNAME'] = 'manticore:9306';
+$config['SPHINX_HOSTNAME_READONLY'] = 'manticore:9307'
+```
+
