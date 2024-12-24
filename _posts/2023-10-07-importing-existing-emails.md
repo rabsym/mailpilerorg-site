@@ -60,16 +60,18 @@ pilerimport -i <imap server> -u <username> -p  <password> [-x comma,separated,sk
 
 By default pilerimport will skip the Junk, Trash, Spam and Draft folders (= -x junk,trash,spam,draft). If you want to import emails from all imap folders (including junk, spam, #), then specify -x ''.
 
+Since piler release v1.4.7 pilerimport uses libcurl to download emails from imap server and it's recommended to specify protocol in server url using imap:// or imaps:// as needed. 
+
 Import emails from a public folder:
 
 ```
-pilerimport -i 1.2.3.4 -u joe -p secretpassword -f publicfoldername -a the.extra@email.address
+pilerimport -i imap://1.2.3.4 -u joe -p secretpassword -f publicfoldername -a the.extra@email.address
 ```
 
 To import all email except from the folder 'Draft' from imap server 1.2.3.4 using the account 'joe':
 
 ```
-pilerimport -i 1.2.3.4 -u joe -p secretpassword -x draft
+pilerimport -i imap://1.2.3.4 -u joe -p secretpassword -x draft
 ```
 
 **Notes**
