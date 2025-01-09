@@ -10,11 +10,17 @@ While the open source version is a cool stuff, however, the enterprise edition h
 
   * flexible SMTP routing
 
-  * more choices for authentication, including SSO against Azure AD, AWS Cognito, and other 3rd party Oauth providers, eg. github, linkedin, etc.
+  * more choices for authentication, including SSO against Azure AD, [Okta](https://mailpiler.com/okta-oidc-authentication/), [Keycloak](https://mailpiler.com/saml-2.0-authentication-with-keycloak/), AWS Cognito, and other 3rd party Oauth providers, eg. github, linkedin, etc.
+
+  * [Bucket feature](https://mailpiler.com/the-bucket-feature/)
 
   * improved attachment storage. The open source version needs the attachment table to re-assemble the email, the commercial edition doesn't need it
 
   * support for compressed or zipped top level dirs. Both editions store one or more files for a single email, thus resulting millions of files in /var/piler/store directory. The enterprise edition allows you to zip them to a series of zip files for easier backup
+
+  * [Redact](https://mailpiler.com/redact-feature/) feature
+
+  * [Permission profiles](https://mailpiler.com/permission-profiles/)
 
   * support for [Prometheus](https://prometheus.io) monitoring
 
