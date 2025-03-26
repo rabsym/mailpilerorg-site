@@ -105,6 +105,14 @@ $langs = array(
              );
 ```
 
+### Attachments content indexing
+
+By default attachment content indexing is enabled and works whenever you have the needed tools in your system (catdoc, pdftotext, unrtf, tnef, xlhtml).
+
+In the case you don't take advantage of this feature you could easily disable it reducing index size and maybe improving search performance.
+
+For doing it set ```extract_attachments=0``` in ```piler.conf```. You may use the pilertest utility with an email having eg. a pdf attachment before and after to verify this settings.
+
 ### How to make a custom skin to piler? (obsoleted)
 
 Copy the style-default.css file, then edit it, eg.
